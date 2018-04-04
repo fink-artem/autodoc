@@ -1,0 +1,4 @@
+Фамилия: $surname
+Имя: $name
+Отчество: $patronymic
+Коммиссия: $commission
