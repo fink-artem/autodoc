@@ -28,8 +28,8 @@ public class DownloadController {
 
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<String> getDocument() {
-        Map<String, String> map = ontologyService.getMap();
-        String document = templateService.generate("templates/document.txt", map);
+//        Map<String, String> map = ontologyService.getMap();
+        String document = null;
         return new ResponseEntity<>(document, HttpStatus.OK);
     }
 

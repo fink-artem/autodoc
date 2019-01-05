@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class OntologyConfig {
 
-    @Value("${ontology.file}")
-    private String ontologyFile;
+    @Value("${ontology.repository.url}")
+    private String ontologyRepositoryUrl;
 
 }
