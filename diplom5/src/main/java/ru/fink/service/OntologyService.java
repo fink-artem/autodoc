@@ -8,7 +8,11 @@ import ru.fink.config.OntologyConfig;
 import ru.fink.converter.Converter;
 import ru.fink.dto.ClassRequestDto;
 import ru.fink.dto.ClassResponseDto;
+import ru.fink.dto.TripletRequestDto;
+import ru.fink.dto.TripletResponseDto;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -19,15 +23,21 @@ public class OntologyService {
     private OntologyConfig configuration;
     private RestTemplate restTemplate;
 
-    public Map<String, Object> getValuesByKey(Set<String> keys) {
-//        return Collections.emptyMap();
-//        return Collections.singletonMap("студент", "Артём");
+    public Map<String, Object> getObjectsByClasses(Set<String> keys) {
         String url = configuration.getOntologyRepositoryUrl();
         ClassRequestDto request = Converter.convertKeysToClassRequestDto(keys);
         ResponseEntity<ClassResponseDto> ontologyResponseDtoResponseEntity =
                 restTemplate.postForEntity(url, request, ClassResponseDto.class);
         ClassResponseDto response = ontologyResponseDtoResponseEntity.getBody();
-        return Converter.convertResponseToMap(response);
+        return Converter.convertClassResponseToMap(response);
     }
 
+    public String resolveTriplet(String subject, String predicat) {
+        String url = configuration.getOntologyRepositoryUrl();
+        TripletRequestDto request = Converter.convertKeyToTripletRequestDto(subject, predicat);
+        ResponseEntity<TripletResponseDto> ontologyResponseDtoResponseEntity =
+                restTemplate.postForEntity(url, request, TripletResponseDto.class);
+        TripletResponseDto response = ontologyResponseDtoResponseEntity.getBody();
+        return Converter.convertTripletResponseToMap(response);
+    }
 }
