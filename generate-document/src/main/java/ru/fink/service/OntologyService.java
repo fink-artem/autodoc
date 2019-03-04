@@ -11,8 +11,6 @@ import ru.fink.dto.ClassResponseDto;
 import ru.fink.dto.TripletRequestDto;
 import ru.fink.dto.TripletResponseDto;
 
-import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 

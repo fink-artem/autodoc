@@ -15,11 +15,15 @@
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
     <modules>
-        <module>diplom5</module>
+        <module>generate-document</module>
+        <module>extract-knowledge</module>
     </modules>
 
     <properties>
         <owlapi.version>4.2.8</owlapi.version>
+        <commons-io.version>2.6</commons-io.version>
+        <commons-collections4.version>4.3</commons-collections4.version>
+        <commons-collections.version>3.2.2</commons-collections.version>
     </properties>
 
     <dependencies>
@@ -43,8 +47,21 @@
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
-            <version>2.6</version>
+            <version>${commons-io.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-collections4</artifactId>
+            <version>${commons-collections4.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+        </dependency>
+
+
     </dependencies>
 
 

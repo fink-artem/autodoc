@@ -1,0 +1,24 @@
+{
+  "rootNode": {
+    "node": {
+      "name": "НАЗНАЧАЕТ",
+      "speechPart": "Г"
+    },
+    "treeNodes": [
+      {
+        "node": {
+          "name": "",
+          "speechPart": "С"
+        },
+        "treeNodes": [
+          {
+            "node": {
+              "name": "ГОСУДАРСТВЕННЫЙ",
+              "speechPart": "П"
+            }
+          }
+        ]
+      }
+    ]
+  }
+}
