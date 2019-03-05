@@ -1,5 +1,5 @@
 
-package ru.fink.parser.seman;
+package ru.fink.utils.parser.seman;
 
 import lombok.Getter;
 

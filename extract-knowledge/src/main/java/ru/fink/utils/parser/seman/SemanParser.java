@@ -1,7 +1,7 @@
-package ru.fink.parser.seman;
+package ru.fink.utils.parser.seman;
 
 import org.apache.commons.lang3.EnumUtils;
-import ru.fink.parser.syntax.SyntaxRel;
+import ru.fink.utils.parser.syntax.SyntaxRel;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -41,7 +41,7 @@ public class SemanParser {
                         String text = read.nextLine();
                         out.println(text);
                         counter++;
-                        System.out.println(counter + " " + text);
+//                        System.out.println(counter + " " + text);
                     }
                     File semanFile = File.createTempFile("seman", "");
                     processBuilder = new ProcessBuilder(rml + "/Bin/TestSeman.exe");
@@ -99,9 +99,14 @@ public class SemanParser {
 
         search = line.lastIndexOf("->") + 3;
         searchSpace = line.indexOf(" ", search);
-        node.speechPart = EnumUtils.getEnum(SpeechPart.class, line.substring(search, searchSpace));
-        if (node.speechPart == null) {
+
+        if (searchSpace < 0) {
             node.speechPart = SpeechPart.UNDEFINED;
+        } else {
+            node.speechPart = EnumUtils.getEnum(SpeechPart.class, line.substring(search, searchSpace));
+            if (node.speechPart == null) {
+                node.speechPart = SpeechPart.UNDEFINED;
+            }
         }
 
         nodes.put(index, node);

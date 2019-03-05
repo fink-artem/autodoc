@@ -18,7 +18,7 @@ import java.util.List;
 public class TemplateService {
 
     @Getter
-    private List<SyntaxTree> syntaxTreeList = new ArrayList<>();
+    private List<SyntaxTree> templates = new ArrayList<>();
 
     @PostConstruct
     public void init() throws IOException {
@@ -35,7 +35,7 @@ public class TemplateService {
         for (File file : files) {
             ObjectMapper mapper = new ObjectMapper();
             InputStream is = new FileInputStream(file);
-            syntaxTreeList.add(mapper.readValue(is, SyntaxTree.class));
+            templates.add(mapper.readValue(is, SyntaxTree.class));
         }
     }
 

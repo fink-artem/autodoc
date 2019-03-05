@@ -1,13 +1,18 @@
 {
   "rootNode": {
     "node": {
-      "name": "НАЗНАЧАЕТ",
+      "name": "НАЗНАЧАТЬ",
       "speechPart": "Г"
     },
     "treeNodes": [
       {
         "node": {
-          "name": "",
+          "knowledgeSign": {
+            "type": "OBJECT",
+            "classObject": "ПООЩРЕНИЕ",
+            "predicate": "НАЗНАЧАТЬСЯ",
+            "subject": "СТУДЕНТ"
+          },
           "speechPart": "С"
         },
         "treeNodes": [

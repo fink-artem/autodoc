@@ -2,11 +2,15 @@ package ru.fink.converter;
 
 import ru.fink.model.SyntaxTree;
 import ru.fink.model.TreeNode;
-import ru.fink.parser.seman.Link;
-import ru.fink.parser.seman.Node;
-import ru.fink.parser.seman.Sent;
+import ru.fink.utils.parser.seman.Link;
+import ru.fink.utils.parser.seman.Node;
+import ru.fink.utils.parser.seman.Sent;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class SentToSyntaxTreeConverter {
@@ -48,7 +52,8 @@ public class SentToSyntaxTreeConverter {
                                           Map<Integer, List<Integer>> parents) {
 
         TreeNode treeNode = new TreeNode();
-        treeNode.setNode(nodes.get(index));
+        treeNode.getNode().name = nodes.get(index).name;
+        treeNode.getNode().speechPart = nodes.get(index).speechPart;
 
         if (parents.containsKey(index)) {
             List<TreeNode> collect = parents.get(index).stream()

@@ -1,4 +1,4 @@
-package ru.fink.parser.syntax;
+package ru.fink.utils.parser.syntax;
 
 import lombok.Getter;
 

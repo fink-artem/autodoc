@@ -1,9 +1,9 @@
 
-package ru.fink.parser.seman;
+package ru.fink.utils.parser.seman;
 
 import lombok.Getter;
 import lombok.Setter;
-import ru.fink.parser.syntax.SyntaxRel;
+import ru.fink.utils.parser.syntax.SyntaxRel;
 
 @Getter
 @Setter

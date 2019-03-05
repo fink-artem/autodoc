@@ -1,7 +1,7 @@
 package ru.fink.converter;
 
 import ru.fink.model.SyntaxTree;
-import ru.fink.parser.syntax.Sent;
+import ru.fink.utils.parser.syntax.Sent;
 
 public class RelToSyntaxTreeConverter {
 

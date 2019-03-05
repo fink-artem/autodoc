@@ -1,4 +1,4 @@
-package ru.fink.parser.syntax;
+package ru.fink.utils.parser.syntax;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
