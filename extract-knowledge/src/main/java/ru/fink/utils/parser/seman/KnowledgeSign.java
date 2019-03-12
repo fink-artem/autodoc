@@ -13,11 +13,13 @@ public class KnowledgeSign {
     private KnowledgeType type;
 
     /**
+     * Класс, к которому относится объект
      * Может быть заполнено только для типа OBJECT
      */
     private String classObject;
 
     /**
+     * Родительский класс
      * Может быть заполнено только для типа Class
      */
     private String parentClass;
@@ -25,5 +27,7 @@ public class KnowledgeSign {
     private String predicate;
 
     private String subject;
+
+    private KnowledgeType subjectType;
 
 }

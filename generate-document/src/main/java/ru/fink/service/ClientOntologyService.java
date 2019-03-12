@@ -16,7 +16,7 @@ import java.util.Set;
 
 @Service
 @AllArgsConstructor
-public class OntologyService {
+public class ClientOntologyService {
 
     private OntologyConfig configuration;
     private RestTemplate restTemplate;

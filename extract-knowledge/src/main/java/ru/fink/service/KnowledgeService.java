@@ -27,19 +27,22 @@ import java.util.stream.Collectors;
 public class KnowledgeService {
 
     private final TemplateService templateService;
+    private final ClientOntologyService clientOntologyService;
 
     public void extractKnowledge(byte[] byteArray) throws IOException {
         List<SyntaxTree> syntaxTrees = buildSyntaxTrees(byteArray);
         List<SyntaxTree> templates = templateService.getTemplates();
 
-        List<TreeNode> parsedTempates = syntaxTrees.stream()
+        List<TreeNode> parsedTemplates = syntaxTrees.stream()
                 .map(syntaxTree -> templates.stream()
                         .map(template -> Utils.matchTemplate(syntaxTree.getRootNode(), template.getRootNode())))
                 .flatMap(Function.identity())
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
 
-        byte[] knowledgeInOwl = KnowledgeToOwlConverter.convert(parsedTempates);
+        byte[] knowledgeInOwl = KnowledgeToOwlConverter.convert(parsedTemplates);
+
+        clientOntologyService.sendOntology(knowledgeInOwl);
     }
 
     private List<SyntaxTree> buildSyntaxTrees(byte[] byteArray) throws IOException {

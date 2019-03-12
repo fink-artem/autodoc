@@ -30,7 +30,7 @@ public class TemplateService {
     private static final String SEPARATOR = "->";
     private static final Pattern regex = Pattern.compile("\\$\\{(.*?)\\}");
 
-    private final OntologyService ontologyService;
+    private final ClientOntologyService clientOntologyService;
 
     @SneakyThrows
     public List<byte[]> generate(byte[] bytes) {
@@ -40,7 +40,7 @@ public class TemplateService {
             keys = getAllKeys(document);
         }
         Pair<Set<String>, Set<String>> separatedKeys = separateKeys(keys);
-        Map<String, Object> objects = ontologyService.getObjectsByClasses(separatedKeys.getFirst());
+        Map<String, Object> objects = clientOntologyService.getObjectsByClasses(separatedKeys.getFirst());
 
 
         Map.Entry<String, Object> next = objects.entrySet().iterator().next();
@@ -61,7 +61,7 @@ public class TemplateService {
         final Map<String, Object> map = Collections.singletonMap(key, value);
         second.forEach(el -> {
             String[] split = el.split(SEPARATOR);
-            String s = ontologyService.resolveTriplet(map.get(split[0]).toString(), split[1]);
+            String s = clientOntologyService.resolveTriplet(map.get(split[0]).toString(), split[1]);
             map.put(el, s);
             if (split.length > 2) {
                 map.put(split[2], s);

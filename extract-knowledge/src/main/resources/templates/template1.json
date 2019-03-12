@@ -7,11 +7,18 @@
     "treeNodes": [
       {
         "node": {
+          "name": "СТУДЕНТ",
+          "speechPart": "С"
+        }
+      },
+      {
+        "node": {
           "knowledgeSign": {
             "type": "OBJECT",
             "classObject": "ПООЩРЕНИЕ",
             "predicate": "НАЗНАЧАТЬСЯ",
-            "subject": "СТУДЕНТ"
+            "subject": "СТУДЕНТ",
+            "subjectType": "OBJECT"
           },
           "speechPart": "С"
         },
@@ -19,6 +26,12 @@
           {
             "node": {
               "name": "ГОСУДАРСТВЕННЫЙ",
+              "speechPart": "П"
+            }
+          },
+          {
+            "node": {
+              "name": "АКАДЕМИЧЕСКИЙ",
               "speechPart": "П"
             }
           }
