@@ -1,0 +1,41 @@
+{
+  "rootNode": {
+    "node": {
+      "name": "ПРОВОДИТЬ",
+      "speechPart": "Г"
+    },
+    "treeNodes": [
+      {
+        "node": {
+          "knowledgeSign": {
+            "type": "OBJECT",
+            "classObject": "ГИА"
+          },
+          "speechPart": "С"
+        }
+      },
+      {
+        "node": {
+          "name": "ОПРЕДЕЛЕНИЕ",
+          "speechPart": "С"
+        },
+        "treeNodes": [
+          {
+            "node": {
+              "name": "СООТВЕТСТВИЕ",
+              "speechPart": "C"
+            },
+            "treeNodes": [
+              {
+                "node": {
+                  "name": "РЕЗУЛЬТАТ",
+                  "speechPart": "C"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

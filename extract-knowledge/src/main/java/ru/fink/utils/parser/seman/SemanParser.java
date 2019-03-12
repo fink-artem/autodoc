@@ -34,14 +34,11 @@ public class SemanParser {
             process.waitFor();
             List<Sent> sentList = new ArrayList<>();
             try (Scanner read = new Scanner(sentFile, ENCODING)) {
-                int counter = 0;
                 while (read.hasNext()) {
                     File temp = File.createTempFile("temp", "");
                     try (PrintWriter out = new PrintWriter(temp, ENCODING)) {
                         String text = read.nextLine();
                         out.println(text);
-                        counter++;
-//                        System.out.println(counter + " " + text);
                     }
                     File semanFile = File.createTempFile("seman", "");
                     processBuilder = new ProcessBuilder(rml + "/Bin/TestSeman.exe");
@@ -52,24 +49,27 @@ public class SemanParser {
 
                     Sent sent = new Sent();
                     try (Scanner reader = new Scanner(semanFile, ENCODING)) {
-                        reader.nextLine();
-                        reader.nextLine();
-                        while (true) {
-                            String line = reader.nextLine();
-                            if (line.equals(RELATIONS)) {
-                                break;
+                        if (reader.hasNext()) {
+                            reader.nextLine();
+                            reader.nextLine();
+                            while (true) {
+                                String line = reader.nextLine();
+                                if (line.equals(RELATIONS)) {
+                                    break;
+                                }
+                                parseLineAndPut(line, sent.getNodes());
                             }
-                            parseLineAndPut(line, sent.getNodes());
-                        }
-                        while (reader.hasNextLine()) {
-                            String line = reader.nextLine();
-                            Link link = parseLink(line);
-                            if (link == null) {
-                                break;
+                            while (reader.hasNextLine()) {
+                                String line = reader.nextLine();
+                                Link link = parseLink(line);
+                                if (link == null) {
+                                    break;
+                                }
+                                sent.getLinkList().add(link);
                             }
-                            sent.getLinkList().add(link);
+                        } else {
+                            System.out.println("Получено слишком длинное предложение");
                         }
-
                     } catch (FileNotFoundException | NoSuchElementException ex) {
                         ex.printStackTrace();
                     }
