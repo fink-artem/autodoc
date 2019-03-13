@@ -17,6 +17,8 @@
     <modules>
         <module>generate-document</module>
         <module>extract-knowledge</module>
+        <module>ontology-manager</module>
+        <module>dto</module>
     </modules>
 
     <properties>

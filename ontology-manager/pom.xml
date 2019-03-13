@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>generate-document</artifactId>
+    <artifactId>ontology-manager</artifactId>
     <build>
         <plugins>
             <plugin>
@@ -29,21 +29,6 @@
     </properties>
 
     <dependencies>
-        <dependency>
-            <groupId>org.apache.poi</groupId>
-            <artifactId>poi-ooxml</artifactId>
-            <version>${poi-ooxml.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>fr.opensagres.xdocreport</groupId>
-            <artifactId>fr.opensagres.xdocreport.document.docx</artifactId>
-            <version>${xdocreport.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>fr.opensagres.xdocreport</groupId>
-            <artifactId>fr.opensagres.xdocreport.template.freemarker</artifactId>
-            <version>${xdocreport.version}</version>
-        </dependency>
         <dependency>
             <groupId>ru.fink</groupId>
             <artifactId>dto</artifactId>
