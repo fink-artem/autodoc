@@ -9,8 +9,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import ru.fink.service.TemplateService;
 
-import java.util.List;
-
 @RestController
 @RequestMapping(value = "/start")
 @AllArgsConstructor
@@ -20,14 +18,19 @@ public class TemplateController {
 
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity getDocument(@RequestBody byte[] bytes) {
-        List<byte[]> document = templateService.generate(bytes);
+        byte[] documents = templateService.generate(bytes);
+
+        if (documents == null) {
+            return ResponseEntity.badRequest().body("ERROR");
+        }
+
         return ResponseEntity
                 .ok()
-                .contentLength(document.size())
+                .contentLength(documents.length)
                 .contentType(MediaType.TEXT_PLAIN)
                 .header("content-disposition", "attachment; " +
-                        "filename=\"document.docx\"")
-                .body(document);
+                        "filename=\"document.zip\"")
+                .body(documents);
     }
 
 }

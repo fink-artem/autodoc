@@ -11,6 +11,7 @@ import ru.fink.dto.ClassResponseDto;
 import ru.fink.dto.TripletRequestDto;
 import ru.fink.dto.TripletResponseDto;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -21,11 +22,11 @@ public class ClientOntologyService {
     private OntologyConfig configuration;
     private RestTemplate restTemplate;
 
-    public Map<String, Object> getObjectsByClasses(Set<String> keys) {
+    public Map<String, List<String>> getObjectsByClasses(Set<String> keys) {
         String url = configuration.getOntologyRepositoryUrl();
         ClassRequestDto request = Converter.convertKeysToClassRequestDto(keys);
         ResponseEntity<ClassResponseDto> ontologyResponseDtoResponseEntity =
-                restTemplate.postForEntity(url, request, ClassResponseDto.class);
+                restTemplate.postForEntity(url + "/ontology/get-object", request, ClassResponseDto.class);
         ClassResponseDto response = ontologyResponseDtoResponseEntity.getBody();
         return Converter.convertClassResponseToMap(response);
     }
@@ -34,7 +35,7 @@ public class ClientOntologyService {
         String url = configuration.getOntologyRepositoryUrl();
         TripletRequestDto request = Converter.convertKeyToTripletRequestDto(subject, predicat);
         ResponseEntity<TripletResponseDto> ontologyResponseDtoResponseEntity =
-                restTemplate.postForEntity(url, request, TripletResponseDto.class);
+                restTemplate.postForEntity(url+ "/ontology/resolve-triplet", request, TripletResponseDto.class);
         TripletResponseDto response = ontologyResponseDtoResponseEntity.getBody();
         return Converter.convertTripletResponseToMap(response);
     }

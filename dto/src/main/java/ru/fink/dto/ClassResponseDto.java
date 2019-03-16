@@ -1,14 +1,17 @@
 package ru.fink.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import org.apache.commons.math3.util.Pair;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 import java.util.Map;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class ClassResponseDto {
 
-    private Map<String, Object> response;
+    private Map<String, List<String>> response;
 
 }

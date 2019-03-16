@@ -11,14 +11,17 @@ import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.springframework.stereotype.Service;
+import ru.fink.utils.ZipUtils;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -27,44 +30,71 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class TemplateService {
 
+    private static final String REGEX_SEPARATOR = "->";
     private static final String SEPARATOR = "->";
     private static final Pattern regex = Pattern.compile("\\$\\{(.*?)\\}");
 
     private final ClientOntologyService clientOntologyService;
 
     @SneakyThrows
-    public List<byte[]> generate(byte[] bytes) {
+    public byte[] generate(byte[] bytes) {
         Set<String> keys;
         try (InputStream inputStream = new ByteArrayInputStream(bytes)) {
             XWPFDocument document = new XWPFDocument(OPCPackage.open(inputStream));
             keys = getAllKeys(document);
         }
         Pair<Set<String>, Set<String>> separatedKeys = separateKeys(keys);
-        Map<String, Object> objects = clientOntologyService.getObjectsByClasses(separatedKeys.getFirst());
+        Map<String, List<String>> objects = clientOntologyService.getObjectsByClasses(separatedKeys.getFirst());
 
+        if (objects.isEmpty()) {
+            return ZipUtils.zipFile(Collections.singletonList(bytes));
+        } else {
+            Map.Entry<String, List<String>> next = objects.entrySet().iterator().next();
+            String key = next.getKey();
+            List<String> value = next.getValue();
 
-        Map.Entry<String, Object> next = objects.entrySet().iterator().next();
-        String key = next.getKey();
-        List<String> value = (List<String>)next.getValue();
+            return ZipUtils.zipFile(value.stream()
+                    .map(el -> {
+                        Map<String, String> values = resolveTriplets(key, el, separatedKeys.getSecond());
 
-        return value.stream().map(el -> {
-            Map<String, Object> values = resolveTriplets(key, el, separatedKeys.getSecond());
-
-            try (InputStream inputStream = new ByteArrayInputStream(bytes)) {
-                return fillDocument(values, inputStream);
-            }
-        }).collect(Collectors.toList());
-
+                        try (InputStream inputStream = new ByteArrayInputStream(bytes)) {
+                            return fillDocument(values, inputStream);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            return null;
+                        }
+                    })
+                    .filter(Objects::nonNull)
+                    .collect(Collectors.toList()));
+        }
     }
 
-    private Map<String, Object> resolveTriplets(String key, String value, Set<String> second) {
-        final Map<String, Object> map = Collections.singletonMap(key, value);
+    private Map<String, String> resolveTriplets(String key, String value, Set<String> second) {
+        Map<String, String> map = new HashMap<>();
+        map.put(key, value);
+
+        Set<String> secondAttempt = new HashSet<>();
         second.forEach(el -> {
-            String[] split = el.split(SEPARATOR);
-            String s = clientOntologyService.resolveTriplet(map.get(split[0]).toString(), split[1]);
-            map.put(el, s);
-            if (split.length > 2) {
-                map.put(split[2], s);
+            String[] split = el.split(REGEX_SEPARATOR);
+            if (map.containsKey(split[0].trim())) {
+                String s = clientOntologyService.resolveTriplet(map.get(split[0].trim()), split[1].trim());
+                map.put(el, s);
+                if (split.length > 2) {
+                    map.put(split[2], s);
+                }
+            } else {
+                secondAttempt.add(el);
+            }
+        });
+
+        secondAttempt.forEach(el -> {
+            String[] split = el.split(REGEX_SEPARATOR);
+            if (map.containsKey(split[0].trim())) {
+                String s = clientOntologyService.resolveTriplet(map.get(split[0].trim()), split[1].trim());
+                map.put(el, s);
+                if (split.length > 2) {
+                    map.put(split[2], s);
+                }
             }
         });
         return map;
@@ -83,11 +113,11 @@ public class TemplateService {
         return new Pair<>(firstSet, secondSet);
     }
 
-    private byte[] fillDocument(Map<String, Object> values, InputStream inputStream) throws Exception {
+    private byte[] fillDocument(Map<String, String> values, InputStream inputStream) throws Exception {
         IXDocReport report = XDocReportRegistry.getRegistry().loadReport(inputStream, TemplateEngineKind.Freemarker);
 
         IContext context = report.createContext();
-        context.putMap(values);
+        context.putMap(new HashMap<>(values));
 
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         report.process(context, out);
