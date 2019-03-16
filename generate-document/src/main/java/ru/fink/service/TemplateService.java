@@ -30,9 +30,9 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class TemplateService {
 
-    private static final String REGEX_SEPARATOR = "->";
-    private static final String SEPARATOR = "->";
-    private static final Pattern regex = Pattern.compile("\\$\\{(.*?)\\}");
+    private static final String REGEX_SEPARATOR = "__";
+    private static final String SEPARATOR = "__";
+    private static final Pattern regex = Pattern.compile("\\$\\{(.*?)}");
 
     private final ClientOntologyService clientOntologyService;
 
@@ -46,32 +46,60 @@ public class TemplateService {
         Pair<Set<String>, Set<String>> separatedKeys = separateKeys(keys);
         Map<String, List<String>> objects = clientOntologyService.getObjectsByClasses(separatedKeys.getFirst());
 
-        if (objects.isEmpty()) {
-            return ZipUtils.zipFile(Collections.singletonList(bytes));
-        } else {
-            Map.Entry<String, List<String>> next = objects.entrySet().iterator().next();
-            String key = next.getKey();
-            List<String> value = next.getValue();
 
-            return ZipUtils.zipFile(value.stream()
-                    .map(el -> {
-                        Map<String, String> values = resolveTriplets(key, el, separatedKeys.getSecond());
+        String key = null;
+        List<String> value = null;
+        Map<String, String> singleObject = new HashMap<>();
 
-                        try (InputStream inputStream = new ByteArrayInputStream(bytes)) {
-                            return fillDocument(values, inputStream);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            return null;
-                        }
-                    })
-                    .filter(Objects::nonNull)
-                    .collect(Collectors.toList()));
+        for (Map.Entry<String, List<String>> entry : objects.entrySet()) {
+            if (entry.getValue().size() == 1) {
+                singleObject.put(entry.getKey(), entry.getValue().get(0));
+            } else if (entry.getValue().size() > 1) {
+
+                if (key != null || value != null) {
+                    throw new UnsupportedOperationException("Не поддерживается");
+                }
+
+                key = entry.getKey();
+                value = entry.getValue();
+            }
         }
+
+        if (key == null) {
+            Map<String, String> values = new HashMap<>(singleObject);
+
+            resolveTriplets(values, separatedKeys.getSecond());
+
+            try (InputStream inputStream = new ByteArrayInputStream(bytes)) {
+                return ZipUtils.zipFile(Collections.singletonList(fillDocument(values, inputStream)));
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+
+        String finalKey = key;
+        return ZipUtils.zipFile(value.stream()
+                .map(el -> {
+                    Map<String, String> values = new HashMap<>();
+                    values.put(finalKey, el);
+                    values.putAll(singleObject);
+
+                    resolveTriplets(values, separatedKeys.getSecond());
+
+                    try (InputStream inputStream = new ByteArrayInputStream(bytes)) {
+                        return fillDocument(values, inputStream);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        return null;
+                    }
+                })
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList()));
+
     }
 
-    private Map<String, String> resolveTriplets(String key, String value, Set<String> second) {
-        Map<String, String> map = new HashMap<>();
-        map.put(key, value);
+    private void resolveTriplets(Map<String, String> map, Set<String> second) {
 
         Set<String> secondAttempt = new HashSet<>();
         second.forEach(el -> {
@@ -87,17 +115,10 @@ public class TemplateService {
             }
         });
 
-        secondAttempt.forEach(el -> {
-            String[] split = el.split(REGEX_SEPARATOR);
-            if (map.containsKey(split[0].trim())) {
-                String s = clientOntologyService.resolveTriplet(map.get(split[0].trim()), split[1].trim());
-                map.put(el, s);
-                if (split.length > 2) {
-                    map.put(split[2], s);
-                }
-            }
-        });
-        return map;
+        if (secondAttempt.size() < second.size()) {
+            resolveTriplets(map, secondAttempt);
+        }
+
     }
 
     private Pair<Set<String>, Set<String>> separateKeys(Set<String> keys) {
