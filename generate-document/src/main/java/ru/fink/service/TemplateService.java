@@ -105,7 +105,7 @@ public class TemplateService {
         second.forEach(el -> {
             String[] split = el.split(REGEX_SEPARATOR);
             if (map.containsKey(split[0].trim())) {
-                String s = clientOntologyService.resolveTriplet(map.get(split[0].trim()), split[1].trim());
+                String s = clientOntologyService.resolveTriplet(map.get(split[0].trim()), split[1].trim()).trim();
                 map.put(el, s);
                 if (split.length > 2) {
                     map.put(split[2], s);
