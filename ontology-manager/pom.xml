@@ -26,6 +26,7 @@
     <properties>
         <poi-ooxml.version>4.0.1</poi-ooxml.version>
         <xdocreport.version>2.0.1</xdocreport.version>
+        <opencsv.version>4.5</opencsv.version>
     </properties>
 
     <dependencies>
@@ -33,6 +34,11 @@
             <groupId>ru.fink</groupId>
             <artifactId>dto</artifactId>
             <version>${parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.opencsv</groupId>
+            <artifactId>opencsv</artifactId>
+            <version>${opencsv.version}</version>
         </dependency>
     </dependencies>
 
