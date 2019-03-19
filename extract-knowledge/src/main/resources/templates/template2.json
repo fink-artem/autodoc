@@ -23,13 +23,13 @@
           {
             "node": {
               "name": "СООТВЕТСТВИЕ",
-              "speechPart": "C"
+              "speechPart": "С"
             },
             "treeNodes": [
               {
                 "node": {
                   "name": "РЕЗУЛЬТАТ",
-                  "speechPart": "C"
+                  "speechPart": "С"
                 }
               }
             ]

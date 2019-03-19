@@ -1,0 +1,25 @@
+{
+  "rootNode": {
+    "node": {
+      "name": "ЗАЩИТА",
+      "speechPart": "С"
+    },
+    "treeNodes": [
+      {
+        "node": {
+          "name": "ФОРМА",
+          "speechPart": "C"
+        }
+      },
+      {
+        "node": {
+          "knowledgeSign": {
+            "type": "OBJECT",
+            "classObject": "тип_квалификационной_работы"
+          },
+          "speechPart": "С"
+        }
+      }
+    ]
+  }
+}

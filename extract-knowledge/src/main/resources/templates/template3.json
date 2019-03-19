@@ -1,0 +1,33 @@
+{
+  "rootNode": {
+    "node": {
+      "name": "ПРИСВОЕНИЕ",
+      "speechPart": "С"
+    },
+    "treeNodes": [
+      {
+        "node": {
+          "name": "ЗАВЕРШАТЬСЯ",
+          "speechPart": "Г"
+        },
+        "treeNodes": [
+          {
+            "node": {
+              "knowledgeSign": {
+                "type": "OBJECT",
+                "classObject": "степень"
+              },
+              "speechPart": "С"
+            }
+          }
+        ]
+      },
+      {
+        "node": {
+          "name": "КВАЛИФИКАЦИЯ",
+          "speechPart": "С"
+        }
+      }
+    ]
+  }
+}
