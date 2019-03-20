@@ -10,6 +10,7 @@ import org.apache.commons.math3.util.Pair;
 import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
+import org.apache.poi.xwpf.usermodel.XWPFTable;
 import org.springframework.stereotype.Service;
 import ru.fink.utils.ZipUtils;
 
@@ -149,6 +150,14 @@ public class TemplateService {
         Set<String> result = new HashSet<>();
         document.getParagraphs().stream()
                 .map(XWPFParagraph::getText)
+                .map(regex::matcher)
+                .forEach(matcher -> {
+                    while (matcher.find()) {
+                        result.add(matcher.group(1).trim());
+                    }
+                });
+        document.getTables().stream()
+                .map(XWPFTable::getText)
                 .map(regex::matcher)
                 .forEach(matcher -> {
                     while (matcher.find()) {
