@@ -22,7 +22,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -72,7 +71,7 @@ public class TemplateService {
             resolveTriplets(values, separatedKeys.getSecond());
 
             try (InputStream inputStream = new ByteArrayInputStream(bytes)) {
-                return ZipUtils.zipFile(Collections.singletonList(fillDocument(values, inputStream)));
+                return ZipUtils.zipFile(Collections.singletonList(new Pair<>(null, fillDocument(values, inputStream))));
             } catch (Exception e) {
                 e.printStackTrace();
                 return null;
@@ -89,13 +88,13 @@ public class TemplateService {
                     resolveTriplets(values, separatedKeys.getSecond());
 
                     try (InputStream inputStream = new ByteArrayInputStream(bytes)) {
-                        return fillDocument(values, inputStream);
+                        return new Pair<>(el, fillDocument(values, inputStream));
                     } catch (Exception e) {
                         e.printStackTrace();
-                        return null;
+                        return new Pair<String, byte[]>(el, null);
                     }
                 })
-                .filter(Objects::nonNull)
+                .filter(el -> el.getValue() != null)
                 .collect(Collectors.toList()));
 
     }

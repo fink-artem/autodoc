@@ -1,6 +1,8 @@
 package ru.fink.utils;
 
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.math3.util.Pair;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -12,7 +14,7 @@ import java.util.zip.ZipOutputStream;
 
 public class ZipUtils {
 
-    public static byte[] zipFile(List<byte[]> files) throws IOException {
+    public static byte[] zipFile(List<Pair<String, byte[]>> files) throws IOException {
 
         if (CollectionUtils.isEmpty(files)) {
             return null;
@@ -21,9 +23,10 @@ public class ZipUtils {
         ByteArrayOutputStream fos = new ByteArrayOutputStream();
         ZipOutputStream zipOut = new ZipOutputStream(fos);
         for (int i = 0; i < files.size(); i++) {
-            byte[] file = files.get(i);
+            byte[] file = files.get(i).getValue();
             InputStream fis = new ByteArrayInputStream(file);
-            ZipEntry zipEntry = new ZipEntry("document" + i + ".docx");
+            String fileName = StringUtils.isEmpty(files.get(i).getKey()) ? "document" + i : files.get(i).getKey();
+            ZipEntry zipEntry = new ZipEntry(fileName + ".docx");
             zipOut.putNextEntry(zipEntry);
 
             byte[] bytes = new byte[1024];
