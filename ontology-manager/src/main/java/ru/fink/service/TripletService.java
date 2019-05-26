@@ -35,6 +35,14 @@ public class TripletService {
         String superVisor = Objects.requireNonNull(getClass().getClassLoader()
                 .getResource("super-visor.csv")).getFile();
         fillByFile(superVisor);
+
+        String superVisorAdditional = Objects.requireNonNull(getClass().getClassLoader()
+                .getResource("super-visor-additional.csv")).getFile();
+        fillByFile(superVisorAdditional);
+
+        String receipt = Objects.requireNonNull(getClass().getClassLoader()
+                .getResource("receipt.csv")).getFile();
+        fillByFile(receipt);
     }
 
     private void fillByFile(String file) throws IOException {
