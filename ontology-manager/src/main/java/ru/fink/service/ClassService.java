@@ -9,8 +9,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
-import java.io.FileReader;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -22,6 +23,8 @@ import java.util.Objects;
 @Slf4j
 @Service
 public class ClassService {
+
+    public static final String ENCODING = "Windows-1251";
 
     @Getter
     private final Map<String, List<String>> classRequests = new HashMap<>();
@@ -58,7 +61,9 @@ public class ClassService {
         }
 
         CSVParser csvParser = new CSVParserBuilder().withSeparator(';').build();
-        CSVReader reader = new CSVReaderBuilder(new FileReader(file)).withCSVParser(csvParser).build();
+        CSVReader reader = new CSVReaderBuilder(new InputStreamReader(new FileInputStream(file), ENCODING))
+                .withCSVParser(csvParser)
+                .build();
 
         reader.readNext();
         String[] line;

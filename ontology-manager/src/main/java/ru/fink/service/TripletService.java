@@ -11,8 +11,9 @@ import ru.fink.dto.TripletRequestDto;
 import ru.fink.dto.TripletResponseDto;
 
 import javax.annotation.PostConstruct;
-import java.io.FileReader;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -21,6 +22,7 @@ import java.util.Objects;
 @Service
 public class TripletService {
 
+    public static final String ENCODING = "Windows-1251";
     @Getter
     private final Map<TripletRequestDto, TripletResponseDto> tripletRequests = new HashMap<>();
 
@@ -42,7 +44,9 @@ public class TripletService {
         }
 
         CSVParser csvParser = new CSVParserBuilder().withSeparator(';').build();
-        CSVReader reader = new CSVReaderBuilder(new FileReader(file)).withCSVParser(csvParser).build();
+        CSVReader reader = new CSVReaderBuilder(new InputStreamReader(new FileInputStream(file), ENCODING))
+                .withCSVParser(csvParser)
+                .build();
 
         String[] header = reader.readNext();
         String[] line;
