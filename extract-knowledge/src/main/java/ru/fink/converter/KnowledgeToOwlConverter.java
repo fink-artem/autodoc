@@ -1,6 +1,6 @@
 package ru.fink.converter;
 
-import com.sun.xml.internal.messaging.saaj.util.ByteOutputStream;
+//import com.sun.xml.internal.messaging.saaj.util.ByteOutputStream;
 import lombok.SneakyThrows;
 import org.apache.commons.lang3.StringUtils;
 import org.semanticweb.owlapi.apibinding.OWLManager;
@@ -34,12 +34,14 @@ public class KnowledgeToOwlConverter {
     @SneakyThrows
     public static byte[] convert(List<TreeNode> parsedTemplates) {
         OWLOntology ontology = MANAGER.createOntology();
-        ByteOutputStream outputStream = new ByteOutputStream();
+//      TODO: не компилируется
+//        ByteOutputStream outputStream = new ByteOutputStream();
 
         parsedTemplates.forEach(parsedTemplate -> processTemplate(ontology, parsedTemplate));
 
-        MANAGER.saveOntology(ontology, new OWLXMLDocumentFormat(), outputStream);
-        return (outputStream).getBytes();
+//        MANAGER.saveOntology(ontology, new OWLXMLDocumentFormat(), outputStream);
+//        return (outputStream).getBytes();
+        return null;
     }
 
     private static void processTemplate(OWLOntology ontology, TreeNode parsedTemplate) {
